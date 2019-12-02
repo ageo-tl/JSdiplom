@@ -1,9 +1,13 @@
 # JSdiplom
 
-Разработка
+### Разработка
+```shell script
 $ npm install
 $ npm run start
-Затем перейти по адресу http://localhost:8080/
+```
+Затем перейти по адресу `http://localhost:8080/`
 
-Сборка проекта
+### Сборка проекта
+```shell script
 $ npm run build
+```
