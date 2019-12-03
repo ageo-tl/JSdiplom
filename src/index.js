@@ -15,6 +15,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnPriceOrder = document.querySelector(".construct-btn.call-btn");
 
 
+  // Promotions and special offers
+  const btnPromoMore = document.querySelector(".add-sentence-btn");
+  const promoBlocks = document.querySelectorAll(".shadow-block");
+  const hiddenPromoBlocks = [...promoBlocks].filter( (item) => {
+    if (item.parentNode.matches(".visible-sm-block, .hidden")) {
+      return item;
+    }
+  });
+
+
 
   // ADD EVENT LISTENER
   document.addEventListener("click", (event) => {
@@ -40,11 +50,21 @@ document.addEventListener("DOMContentLoaded", () => {
       showPopup(popupDiscount);
     }
     if (target === popupDiscount ||
-      target === popupDiscount.querySelector(".popup-close")) {
-    event.preventDefault();
-    // popupDiscount.style.display = "none";
-    hidePopup(popupDiscount);
-  }
+        target === popupDiscount.querySelector(".popup-close")) {
+      event.preventDefault();
+      // popupDiscount.style.display = "none";
+      hidePopup(popupDiscount);
+    }
+
+    // Promotions and special offers
+    if (target === btnPromoMore) {
+      btnPromoMore.style.display = "none";
+      hiddenPromoBlocks.forEach( (elem) => {
+        elem.parentNode.style.cssText = 'display: block !important';
+      });
+
+    }
+
   });
 
 });
