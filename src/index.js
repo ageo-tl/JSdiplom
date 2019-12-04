@@ -23,13 +23,27 @@ document.addEventListener("DOMContentLoaded", () => {
   // Promotions and special offers
   const btnPromoMore = document.querySelector(".add-sentence-btn");
   const promoBlocks = document.querySelectorAll(".shadow-block");
-  let hiddenPromoBlocks = [...promoBlocks].filter( (item) => {
-    if (item.parentNode.matches(".visible-sm-block, .hidden")) {
-      return item;
-    }
-  });
-  hiddenPromoBlocks = hiddenPromoBlocks.map((item) => item.parentNode);
 
+  const getHidePromoBlocks = (blocks) => {
+    const windowWidth = document.documentElement.clientWidth;
+
+    // 768...NO-.visible-sm-block...991
+    let classesMask;
+    if (windowWidth > 768 && windowWidth < 991) {
+      classesMask = ".hidden";
+    } else {
+      classesMask = ".visible-sm-block, .hidden";
+    }
+
+    let hiddenBlocks = [...blocks].filter( (item) => {
+      if (item.parentNode.matches(classesMask)) {
+        return item;
+      }
+    });
+    return hiddenBlocks.map((item) => item.parentNode);
+  };
+
+  let hiddenPromoBlocks = getHidePromoBlocks(promoBlocks);
 
 
   //accordion-FAQ
@@ -60,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-  // ADD EVENT LISTENER
+  // ADD EVENT LISTENER FOR CLICK
   document.addEventListener("click", (event) => {
     const { target } = event;
     // console.log('TARGET: ', target);
@@ -117,4 +131,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   });
+
+  // ADD EVENT LISTENER FOR RESIZE
+  window.addEventListener("resize", () => {
+    // Promotions and special offers
+    // Переопределяем скрытые блоки в разделе Акции и спецпредложения
+    hiddenPromoBlocks = getHidePromoBlocks(promoBlocks);
+  });
+
 });
