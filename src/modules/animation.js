@@ -3,6 +3,25 @@ const quad = (timeFraction) => {
   return Math.pow(timeFraction, 2);
 };
 
+// Прозрачность элемента
+const animateOpacity = (elem, current, target, progress) => {
+  elem.style.opacity =
+      (current + (target - current) * progress).toString();
+};
+
+// Прокрутка страницы
+const animateScrollPage = (current, target, progress) => {
+  document.documentElement.scrollTop =
+      current + (target - current) * progress;
+};
+
+// Высота элемента
+const animateHeight = (elem, current, target, units, progress) => {
+  elem.style.height =
+      (current + (target - current) * progress).toString() + units;
+};
+
+
 // Анимация действия
 const commonAnimation = ({ timing, draw, duration }) => {
 
@@ -25,4 +44,10 @@ const commonAnimation = ({ timing, draw, duration }) => {
   requestAnimationFrame(animate);
 };
 
-export { quad, commonAnimation };
+export {
+  quad,
+  animateOpacity,
+  animateScrollPage,
+  animateHeight,
+  commonAnimation
+};

@@ -1,4 +1,4 @@
-import { commonAnimation, quad } from "./animation";
+import { commonAnimation, quad, animateHeight } from "./animation";
 
 // Переключение видимости элементов "аккордеона"
 const simpleTogglePanelBody = (showElem, hideElem, classCollapse) => {
@@ -9,12 +9,6 @@ const simpleTogglePanelBody = (showElem, hideElem, classCollapse) => {
 };
 
 
-// Реализация анимации элемента аккордеона (изменение высоты объекта)
-const _animateAccordion = (elem, current, target, units, progress) => {
-  elem.style.height =
-      (current + (target - current) * progress).toString() + units;
-};
-
 // Анимированное скрытие элемента "аккордеона"
 const animateHideAccordElem = (elem, classCollapse, currentHeight,
       duration=350) => {
@@ -23,7 +17,7 @@ const animateHideAccordElem = (elem, classCollapse, currentHeight,
   const units = currentHeight.replace(/^\-?\d+(\.\d+)?/, "");
 
   // Скрываем активный элемент
-  const animationHidePanel = _animateAccordion.bind(null,
+  const animationHidePanel = animateHeight.bind(null,
       elem, height, 0, units);
   commonAnimation({timing: quad, draw: animationHidePanel, duration});
   setTimeout( () => {
@@ -41,7 +35,7 @@ const animateShowAccordElem = (elem, classCollapse, targetHeight,
   // Показываем элемент, на заголовке которого был клик
   elem.style.height = "0rem";
   elem.classList.add(classCollapse);
-  const animationShowPanel = _animateAccordion.bind(null, elem,
+  const animationShowPanel = animateHeight.bind(null, elem,
       0, height, units);
   commonAnimation({timing: quad, draw: animationShowPanel, duration});
 };
