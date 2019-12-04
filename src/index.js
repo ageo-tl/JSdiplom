@@ -3,6 +3,7 @@ import {
   animateShowAccordElem,
   animateHideAccordElem
 } from "./modules/toggleElemsOfAccord";
+import showHiddenBlocks from "./modules/showAddPromo";
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -22,11 +23,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Promotions and special offers
   const btnPromoMore = document.querySelector(".add-sentence-btn");
   const promoBlocks = document.querySelectorAll(".shadow-block");
-  const hiddenPromoBlocks = [...promoBlocks].filter( (item) => {
+  let hiddenPromoBlocks = [...promoBlocks].filter( (item) => {
     if (item.parentNode.matches(".visible-sm-block, .hidden")) {
       return item;
     }
   });
+  hiddenPromoBlocks = hiddenPromoBlocks.map((item) => item.parentNode);
+
 
 
   //accordion-FAQ
@@ -90,9 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Promotions and special offers
     if (target === btnPromoMore) {
       btnPromoMore.style.display = "none";
-      hiddenPromoBlocks.forEach( (elem) => {
-        elem.parentNode.style.cssText = 'display: block !important';
-      });
+      showHiddenBlocks(hiddenPromoBlocks);
     }
 
     //accordion-FAQ
