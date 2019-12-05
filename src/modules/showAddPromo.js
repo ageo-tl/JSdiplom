@@ -1,6 +1,10 @@
 import { commonAnimation, quad, animateOpacity, animateScrollPage } from "./animation";
 
 
+const disableBlockHiding = (elems) => {
+  elems.forEach ( (elem) => elem.style.cssText = 'display: block !important;');
+};
+
 const showHiddenBlocks = (elems, duration=350, timeoutGap=250) => {
   // Начало отображения элементов и
   // определение функции анимирования появления для каждого элемента
@@ -45,4 +49,4 @@ const showHiddenBlocks = (elems, duration=350, timeoutGap=250) => {
   });
 };
 
-export default showHiddenBlocks;
+export { showHiddenBlocks, disableBlockHiding };

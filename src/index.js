@@ -3,7 +3,7 @@ import {
   animateShowAccordElem,
   animateHideAccordElem
 } from "./modules/toggleElemsOfAccord";
-import showHiddenBlocks from "./modules/showAddPromo";
+import { showHiddenBlocks, disableBlockHiding } from "./modules/showAddPromo";
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -24,12 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnPromoMore = document.querySelector(".add-sentence-btn");
   const promoBlocks = document.querySelectorAll(".shadow-block");
 
-  const getHidePromoBlocks = (blocks) => {
+  const getHidePromoBlocks = (blocks, actual=true) => {
     const windowWidth = document.documentElement.clientWidth;
 
     // 768...NO-.visible-sm-block...991
     let classesMask;
-    if (windowWidth > 768 && windowWidth < 991) {
+    if (windowWidth > 768 && windowWidth < 991 && actual) {
       classesMask = ".hidden";
     } else {
       classesMask = ".visible-sm-block, .hidden";
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return hiddenBlocks.map((item) => item.parentNode);
   };
 
-  let hiddenPromoBlocks = getHidePromoBlocks(promoBlocks);
+  const initHiddenPromoBlocks = getHidePromoBlocks(promoBlocks, false);
 
 
   //accordion-FAQ
@@ -107,7 +107,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Promotions and special offers
     if (target === btnPromoMore) {
       btnPromoMore.style.display = "none";
-      showHiddenBlocks(hiddenPromoBlocks);
+
+      const hiddenBlocks = getHidePromoBlocks(promoBlocks);
+      const tempDisplayedBlocks = initHiddenPromoBlocks.filter(
+            (block) => !hiddenBlocks.includes(block)
+        );
+
+      disableBlockHiding(tempDisplayedBlocks);
+      showHiddenBlocks(hiddenBlocks);
     }
 
     //accordion-FAQ
@@ -130,13 +137,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-  });
-
-  // ADD EVENT LISTENER FOR RESIZE
-  window.addEventListener("resize", () => {
-    // Promotions and special offers
-    // Переопределяем скрытые блоки в разделе Акции и спецпредложения
-    hiddenPromoBlocks = getHidePromoBlocks(promoBlocks);
   });
 
 });
