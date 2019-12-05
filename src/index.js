@@ -14,10 +14,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnsCallMeBack = document.querySelectorAll(".call-btn[href='#']");
 
 
-  // Discount price and order
+  // Discount price and order popup
   const popupDiscount = document.querySelector(".popup-discount");
   const btnsDiscount = document.querySelectorAll(".discount-btn");
   const btnPriceOrder = document.querySelector(".construct-btn.call-btn");
+
+
+  // Get check-list popup
+  const popupCheck = document.querySelector(".popup-check");
+  const btnGetCheckList = document.querySelector(".check-btn");
 
 
   // Promotions and special offers
@@ -92,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
       hidePopup(popupCall);
     }
 
-    // Discount price and order
+    // Discount price and order popup
     if ([...btnsDiscount, btnPriceOrder].includes(target)) {
       // popupDiscount.style.display = "block";
       showPopup(popupDiscount);
@@ -102,6 +107,17 @@ document.addEventListener("DOMContentLoaded", () => {
       event.preventDefault();
       // popupDiscount.style.display = "none";
       hidePopup(popupDiscount);
+    }
+
+    // Get check-list popup
+    if (target === btnGetCheckList) {
+      event.preventDefault();
+      showPopup(popupCheck);
+    }
+    if (target === popupCheck ||
+        target === popupCheck.querySelector(".popup-close")) {
+      event.preventDefault();
+      hidePopup(popupCheck);
     }
 
     // Promotions and special offers
