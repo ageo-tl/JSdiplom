@@ -101,6 +101,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const podstava = document.querySelector(".constructor .panel-four p");
 
 
+  // sump-switcher
+  const sumpSwitcher =
+      document.getElementById("collapseOne").querySelector(".onoffswitch");
+  const inpSumpSwitcher = document.getElementById("myonoffswitch");
+  const firstSump = document.getElementById("first-sump");
+  const secondSump = document.getElementById("second-sump");
+  const sumpSwitch = () => {
+    if (inpSumpSwitcher.checked) {
+      firstSump.querySelector(".title-text").textContent = "приемный колодец";
+      accCalcPanelBodiesHeight.collapseTwo = "20.5rem";
+      secondSump.style.display = "none";
+    } else {
+      firstSump.querySelector(".title-text").textContent =
+          "первый колодец (приемный)";
+      accCalcPanelBodiesHeight.collapseTwo = "32rem";
+      secondSump.style.display = "block";
+    }
+  };
+  sumpSwitch();
+
 
   // ADD EVENT LISTENER FOR CLICK
   document.addEventListener("click", (event) => {
@@ -207,6 +227,11 @@ document.addEventListener("DOMContentLoaded", () => {
           accCalcPanelBodiesHeight[showElem.getAttribute("id")]);
     }
 
+
+    //sump-switcher
+    if (sumpSwitcher.contains(target)) {
+      sumpSwitch();
+    }
 
 
   });
