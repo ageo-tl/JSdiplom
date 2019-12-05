@@ -179,9 +179,9 @@ document.addEventListener("DOMContentLoaded", () => {
         [...accCalcRefsOnButton].includes(target.closest("a"))) {
       event.preventDefault();
       let showId;
-      if (target.closest("a").matches(".construct-btn")) {
+      if (target.closest("a.construct-btn")) {
         // Получим ссылку у элемента a.construct-btn, если была нажата кнопка
-        showId = target.closest("a").getAttribute("href").slice(1);
+        showId = target.closest("a.construct-btn").getAttribute("href").slice(1);
       } else {
         // Получим ссылку у элемента div.panel-heading, если нажали таб
         showId = target.closest(".panel-heading")
