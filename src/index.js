@@ -4,6 +4,7 @@ import {
   animateHideAccordElem
 } from "./modules/toggleElemsOfAccord";
 import { showHiddenBlocks, disableBlockHiding } from "./modules/showAddPromo";
+import sumpCalc from "./modules/sumpCalc";
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -122,6 +123,15 @@ document.addEventListener("DOMContentLoaded", () => {
   sumpSwitch();
 
 
+  // sump-calculator
+  // use accordionCalc from block 'accordion-calc'
+  // const inpDistance = document.getElementById("collapseFour").querySelector("input");
+  const inpCalcResult = document.getElementById("calc-result");
+
+  inpCalcResult.value = sumpCalc();
+
+
+
   // ADD EVENT LISTENER FOR CLICK
   document.addEventListener("click", (event) => {
     const { target } = event;
@@ -234,6 +244,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+  });
+
+
+  // ADD EVENT LISTENER FOR CHANGE
+  accordionCalc.addEventListener("change", (event) => {
+    inpCalcResult.value = sumpCalc();
   });
 
 });
