@@ -1,3 +1,5 @@
+import { hidePopup } from "./showAndHidePopup";
+
 const postData = (body) => {
   // Отправка данных с помощью fetch
   return fetch("./server.php", {
@@ -52,6 +54,14 @@ const sendForm = (form, data) => {
       const inputes = [...form.elements].filter(
         (elem) => !elem.matches("button, input[type=\"button\"]"));
       inputes.forEach( (elem) => {elem.value = "";});
+      // Popup формы
+      const formPopup = form.closest(".popup");
+      if (formPopup) {
+        // Скрытие popup'а формы
+        setTimeout( () => {
+          hidePopup(formPopup);
+        }, 3500);
+      }
     })
     .catch( (error) => {
       statusMessage.style.color = "OrangeRed";
