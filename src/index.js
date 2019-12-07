@@ -169,6 +169,8 @@ document.addEventListener("DOMContentLoaded", () => {
       showPopup(popupDiscount);
       if (btnPriceOrder.contains(target)) {
         userData = sumpData();
+      } else {
+        userData = null;
       }
     }
     if (target === popupDiscount ||
@@ -287,7 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", (event) => {
       event.preventDefault();
       if (!form.contains(directorForm)) {
-        sendForm(form, userData);
+        sendForm(form, form.closest(".popup") ? userData : null);
       }
     });
   });

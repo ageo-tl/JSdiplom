@@ -52,7 +52,7 @@ const sendForm = (form, data) => {
       statusMessage.textContent = succesMessage;
       // Очистка формы при успешном ответе сервера
       const inputes = [...form.elements].filter(
-        (elem) => !elem.matches("button, input[type=\"button\"]"));
+        (elem) => elem.matches("input[type=\"text\"]"));
       inputes.forEach( (elem) => {elem.value = "";});
       // Popup формы
       const formPopup = form.closest(".popup");
@@ -61,6 +61,10 @@ const sendForm = (form, data) => {
         setTimeout( () => {
           hidePopup(formPopup);
         }, 3500);
+        // Очистка формы .director-form (если требуется)
+        if (formPopup.matches(".popup-consultation")) {
+          document.querySelector("form.director-form > input").value = "";
+        }
       }
     })
     .catch( (error) => {
