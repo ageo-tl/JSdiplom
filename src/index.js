@@ -26,6 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // Для хранения данных с форм (конструктор септика, вопрос для консультации)
   let userData = null;
 
+  // All forms
+  const directorForm = document.querySelector("form.director-form");
+
+
   // Call me back popup
   const popupCall = document.querySelector(".popup-call");
   const btnsCallMeBack = document.querySelectorAll(".call-btn[href='#']");
@@ -45,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Get consultation popup
   const popupConsult = document.querySelector(".popup-consultation");
   const btnConsult = document.querySelector(".consultation-btn");
+  const inpQuestion = directorForm.querySelector("input");
 
 
   // Promotions and special offers
@@ -86,11 +91,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const inpCalcResult = document.getElementById("calc-result");
 
   inpCalcResult.value = sumpCalc();
-
-
-  // All forms
-  const forms = document.querySelectorAll("form");
-  const directorForm = document.querySelector("form.director-form");
 
 
   // Input filter
@@ -147,8 +147,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Get consultation popup
     if (target === btnConsult) {
       event.preventDefault();
-      showPopup(popupConsult);
-      userData = {userQuestion: directorForm.querySelector("input").value};
+      if (inpQuestion.value) {
+        inpQuestion.style.border = "";
+        showPopup(popupConsult);
+        userData = {userQuestion: inpQuestion.value};
+      } else {
+        inpQuestion.style.border = "1px solid red";
+      }
     }
     closePopup(popupConsult, target);
 
