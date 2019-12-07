@@ -87,16 +87,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // sump-calculator
   // use accordionCalc from block 'accordion-calc'
-  // const inpDistance = document.getElementById("collapseFour").querySelector("input");
   const inpCalcResult = document.getElementById("calc-result");
-
   inpCalcResult.value = sumpCalc();
 
 
   // Input filter
+  // for numeric filter
   const phoneInputs = document.querySelectorAll(".phone-user");
   const calcInputs = document.querySelectorAll("input[id^=\"calc-\"]");
-
+  // for cyrillic filter
   const nameInputs = document.querySelectorAll("input[id^=\"name_\"]");
   const userQuestion = document.getElementById("user_quest");
 
@@ -115,19 +114,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // ADD EVENT LISTENER FOR CLICK
   document.addEventListener("click", (event) => {
     const { target } = event;
-    // console.log('TARGET: ', target);
 
     // Call me back popup
     if ([...btnsCallMeBack].includes(target)) {
       event.preventDefault();
-      // popupCall.style.display = "block";
       showPopup(popupCall);
     }
     closePopup(popupCall, target);
 
     // Discount price and order popup
     if ([...btnsDiscount, btnPriceOrder].includes(target)) {
-      // popupDiscount.style.display = "block";
       showPopup(popupDiscount);
       if (btnPriceOrder.contains(target)) {
         userData = sumpData();
@@ -182,7 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       const hideElem = getActiveElemOfAccord(accFaqPanelBodies, "in");
 
-      // simpleTogglePanelBody(showElem, hideElem, "in");
       animateHideAccordElem(hideElem, "in", hideElem.style.height);
       animateShowAccordElem(showElem, "in",
           accFaqPanelBodiesHeight[showElem.getAttribute("id")]);
@@ -208,8 +203,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       const hideElem = getActiveElemOfAccord(accCalcPanelBodies, "in");
 
-      // simpleTogglePanelBody(showElem, hideElem, "in");
-
       if (showElem.contains(podstava)) {
         showPopup(podstava, 600);
       }
@@ -221,7 +214,6 @@ document.addEventListener("DOMContentLoaded", () => {
           accCalcPanelBodiesHeight[showElem.getAttribute("id")]);
     }
 
-
     //sump-switcher
     if (sumpSwitcher.contains(target)) {
       sumpSwitch();
@@ -230,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // ADD EVENT LISTENER FOR CHANGE
-  accordionCalc.addEventListener("change", (event) => {
+  accordionCalc.addEventListener("change", () => {
     inpCalcResult.value = sumpCalc();
   });
 
