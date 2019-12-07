@@ -11,6 +11,14 @@ import {
 import { sumpCalc, sumpData } from "./modules/sumpCalc";
 import sendForm from "./modules/sendForm";
 import {cyrillicFilter, numericFilter} from "./modules/inputFilters";
+import {
+  getActiveElemOfAccord,
+  prepareAccordFaq,
+  prepareAccordCalc,
+  sumpSwitch,
+  accFaqPanelBodiesHeight,
+  accCalcPanelBodiesHeight,
+} from "./modules/accordions";
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -50,25 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const accFaqRefs = accordionFAQ.querySelectorAll("a[data-parent='#accordion-two']");
   const accFaqPanels = [...accFaqRefs].map((elem) => elem.closest(".panel-heading"));
   const accFaqPanelBodies = accordionFAQ.querySelectorAll(".panel-collapse");
-
   // Подготовка элементов "аккордеона" с частыми вопросами для анимирования
-  const accFaqPanelBodiesHeight = {
-    "collapseOne-two": "14rem",
-    "collapseTwo-two": "7.5rem",
-    "collapseThree-two": "9.5rem",
-  };
-  accFaqPanelBodies.forEach( (elem) => {
-    elem.style.height = accFaqPanelBodiesHeight[elem.getAttribute("id")];
-  });
-  const accFaqPanelBlocks = accordionFAQ.querySelectorAll(".panel-default");
-  accFaqPanelBlocks.forEach( (elem) => elem.style.overflow = "hidden");
-
-  // Возвращает активный элемент "аккордеона"
-  const getActiveElemOfAccord = (accPanelBodies, classCollapse) => {
-    return [...accPanelBodies].filter(
-      (elem) => elem.matches("." + classCollapse)
-    )[0];
-  };
+  prepareAccordFaq(accordionFAQ, accFaqPanelBodies);
 
 
   //accordion-calc
@@ -77,20 +68,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const accCalcPanels = [...accCalcRefs].map((elem) => elem.closest(".panel-heading"));
   const accCalcPanelBodies = accordionCalc.querySelectorAll(".panel-collapse");
   const accCalcRefsOnButton = accordionCalc.querySelectorAll("a.construct-btn[data-parent='#accordion']");
-
   // Подготовка элементов "аккордеона" с частыми вопросами для анимирования
-  const accCalcPanelBodiesHeight = {
-    "collapseOne": "20rem",
-    "collapseTwo": "32rem",
-    "collapseThree": "22rem",
-    "collapseFour": "20rem",
-  };
-  accCalcPanelBodies.forEach( (elem) => {
-    elem.style.height = accCalcPanelBodiesHeight[elem.getAttribute("id")];
-  });
-  const accCalcPanelBlocks = accordionCalc.querySelectorAll(".panel-default");
-  accCalcPanelBlocks.forEach( (elem) => elem.style.overflow = "hidden");
-
+  prepareAccordCalc(accordionCalc, accCalcPanelBodies);
   // Это все из-за '.constructor .panel-four p::after' в css/style.css
   const podstava = document.querySelector(".constructor .panel-four p");
 
@@ -98,21 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // sump-switcher
   const sumpSwitcher =
       document.getElementById("collapseOne").querySelector(".onoffswitch");
-  const inpSumpSwitcher = document.getElementById("myonoffswitch");
-  const firstSump = document.getElementById("first-sump");
-  const secondSump = document.getElementById("second-sump");
-  const sumpSwitch = () => {
-    if (inpSumpSwitcher.checked) {
-      firstSump.querySelector(".title-text").textContent = "приемный колодец";
-      accCalcPanelBodiesHeight.collapseTwo = "20.5rem";
-      secondSump.style.display = "none";
-    } else {
-      firstSump.querySelector(".title-text").textContent =
-          "первый колодец (приемный)";
-      accCalcPanelBodiesHeight.collapseTwo = "32rem";
-      secondSump.style.display = "block";
-    }
-  };
   sumpSwitch();
 
 
