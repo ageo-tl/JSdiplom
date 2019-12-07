@@ -5,6 +5,7 @@ import {
 } from "./modules/toggleElemsOfAccord";
 import { showHiddenBlocks, disableBlockHiding } from "./modules/showAddPromo";
 import { sumpCalc, sumpData } from "./modules/sumpCalc";
+import sendForm from "./modules/sendForm";
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -138,6 +139,11 @@ document.addEventListener("DOMContentLoaded", () => {
   inpCalcResult.value = sumpCalc();
 
 
+  // All forms
+  const forms = document.querySelectorAll("form");
+  const directorForm = document.querySelector("form.director-form");
+
+
 
   // ADD EVENT LISTENER FOR CLICK
   document.addEventListener("click", (event) => {
@@ -267,14 +273,23 @@ document.addEventListener("DOMContentLoaded", () => {
     if (sumpSwitcher.contains(target)) {
       sumpSwitch();
     }
-
-
   });
 
 
   // ADD EVENT LISTENER FOR CHANGE
   accordionCalc.addEventListener("change", (event) => {
     inpCalcResult.value = sumpCalc();
+  });
+
+
+  // ADD EVENT LISTENER FOR SUBMIT
+  forms.forEach( (form) => {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!form.contains(directorForm)) {
+        sendForm(form, userData);
+      }
+    });
   });
 
 });
