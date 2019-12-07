@@ -101,6 +101,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const userQuestion = document.getElementById("user_quest");
 
 
+  // function for listener
+  const closePopup = (popup, target) => {
+    if (target === popup ||
+      target === popup.querySelector(".popup-close")) {
+      event.preventDefault();
+      hidePopup(popup);
+      userData = null;
+    }
+  };
+
 
   // ADD EVENT LISTENER FOR CLICK
   document.addEventListener("click", (event) => {
@@ -113,12 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // popupCall.style.display = "block";
       showPopup(popupCall);
     }
-    if (target === popupCall ||
-        target === popupCall.querySelector(".popup-close")) {
-      event.preventDefault();
-      // popupCall.style.display = "none";
-      hidePopup(popupCall);
-    }
+    closePopup(popupCall, target);
 
     // Discount price and order popup
     if ([...btnsDiscount, btnPriceOrder].includes(target)) {
@@ -130,24 +135,14 @@ document.addEventListener("DOMContentLoaded", () => {
         userData = null;
       }
     }
-    if (target === popupDiscount ||
-        target === popupDiscount.querySelector(".popup-close")) {
-      event.preventDefault();
-      // popupDiscount.style.display = "none";
-      hidePopup(popupDiscount);
-      userData = null;
-    }
+    closePopup(popupDiscount, target);
 
     // Get check-list popup
     if (target === btnGetCheckList) {
       event.preventDefault();
       showPopup(popupCheck);
     }
-    if (target === popupCheck ||
-        target === popupCheck.querySelector(".popup-close")) {
-      event.preventDefault();
-      hidePopup(popupCheck);
-    }
+    closePopup(popupCheck, target);
 
     // Get consultation popup
     if (target === btnConsult) {
@@ -155,12 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
       showPopup(popupConsult);
       userData = {userQuestion: directorForm.querySelector("input").value};
     }
-    if (target === popupConsult ||
-        target === popupConsult.querySelector(".popup-close")) {
-      event.preventDefault();
-      hidePopup(popupConsult);
-      userData = null;
-    }
+    closePopup(popupConsult, target);
 
     // Promotions and special offers
     if (target === btnPromoMore) {
