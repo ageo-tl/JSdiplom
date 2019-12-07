@@ -28,6 +28,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnGetCheckList = document.querySelector(".check-btn");
 
 
+  // Get consultation popup
+  const popupConsult = document.querySelector(".popup-consultation");
+  const btnConsult = document.querySelector(".consultation-btn");
+
+
   // Promotions and special offers
   const btnPromoMore = document.querySelector(".add-sentence-btn");
   const promoBlocks = document.querySelectorAll(".shadow-block");
@@ -177,6 +182,20 @@ document.addEventListener("DOMContentLoaded", () => {
         target === popupCheck.querySelector(".popup-close")) {
       event.preventDefault();
       hidePopup(popupCheck);
+    }
+
+    // Get consultation popup
+    if (target === btnConsult) {
+      event.preventDefault();
+      showPopup(popupConsult);
+      userData = {userQuestion: directorForm.querySelector("input").value};
+      console.log('userData: ', userData);
+    }
+    if (target === popupConsult ||
+        target === popupConsult.querySelector(".popup-close")) {
+      event.preventDefault();
+      hidePopup(popupConsult);
+      userData = null;
     }
 
     // Promotions and special offers
