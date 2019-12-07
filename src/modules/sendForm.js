@@ -12,12 +12,19 @@ const postData = (body) => {
 const sendForm = (form, data) => {
   const errorMessage = "Что-то пошло не так...",
         loadMessage = "Загрузка...",
-        succesMessage = "Спасибо! Мы скоро с Вами свяжемся!",
-        statusMessage = document.createElement("div");
+        succesMessage = "Спасибо! Мы скоро с Вами свяжемся!";
+  let statusMessage = document.createElement("div");
+  statusMessage.classList.add("status-message");
   statusMessage.style.cssText = "font-size: 2rem; color: SteelBlue;";
 
   // Элемент для сообщения
-  form.appendChild(statusMessage);
+  if (form.lastElementChild.matches(".status-message")) {
+    statusMessage = form.lastElementChild;
+    statusMessage.textContent = loadMessage;
+    statusMessage.style.color = "SteelBlue";
+  } else {
+    form.appendChild(statusMessage);
+  }
 
   // Данные из формы
   const formData = new FormData(form);
@@ -39,7 +46,7 @@ const sendForm = (form, data) => {
         throw new Error("network status is " +
           response.status + " - " + response.statusText);
       }
-      statusMessage.style.color = "PaleGreen";
+      statusMessage.style.color = "Green";
       statusMessage.textContent = succesMessage;
       // Очистка формы при успешном ответе сервера
       const inputes = [...form.elements].filter(
