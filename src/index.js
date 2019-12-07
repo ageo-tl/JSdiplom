@@ -4,11 +4,13 @@ import {
   animateHideAccordElem
 } from "./modules/toggleElemsOfAccord";
 import { showHiddenBlocks, disableBlockHiding } from "./modules/showAddPromo";
-import sumpCalc from "./modules/sumpCalc";
+import { sumpCalc, sumpData } from "./modules/sumpCalc";
 
 
 document.addEventListener("DOMContentLoaded", () => {
   "use strict";
+  // Для хранения данных с форм (конструктор септика, вопрос для консультации)
+  let userData = null;
 
   // Call me back popup
   const popupCall = document.querySelector(".popup-call");
@@ -154,12 +156,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if ([...btnsDiscount, btnPriceOrder].includes(target)) {
       // popupDiscount.style.display = "block";
       showPopup(popupDiscount);
+      if (btnPriceOrder.contains(target)) {
+        userData = sumpData();
+      }
     }
     if (target === popupDiscount ||
         target === popupDiscount.querySelector(".popup-close")) {
       event.preventDefault();
       // popupDiscount.style.display = "none";
       hidePopup(popupDiscount);
+      userData = null;
     }
 
     // Get check-list popup
