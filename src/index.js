@@ -3,7 +3,11 @@ import {
   animateShowAccordElem,
   animateHideAccordElem
 } from "./modules/toggleElemsOfAccord";
-import { showHiddenBlocks, disableBlockHiding } from "./modules/showAddPromo";
+import {
+  showHiddenBlocks,
+  disableBlockHiding,
+  getHidePromoBlocks,
+} from "./modules/showAddPromo";
 import { sumpCalc, sumpData } from "./modules/sumpCalc";
 import sendForm from "./modules/sendForm";
 import {cyrillicFilter, numericFilter} from "./modules/inputFilters";
@@ -38,26 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Promotions and special offers
   const btnPromoMore = document.querySelector(".add-sentence-btn");
   const promoBlocks = document.querySelectorAll(".shadow-block");
-
-  const getHidePromoBlocks = (blocks, actual=true) => {
-    const windowWidth = document.documentElement.clientWidth;
-
-    // 768...NO-.visible-sm-block...991
-    let classesMask;
-    if (windowWidth > 768 && windowWidth < 991 && actual) {
-      classesMask = ".hidden";
-    } else {
-      classesMask = ".visible-sm-block, .hidden";
-    }
-
-    let hiddenBlocks = [...blocks].filter( (item) => {
-      if (item.parentNode.matches(classesMask)) {
-        return item;
-      }
-    });
-    return hiddenBlocks.map((item) => item.parentNode);
-  };
-
   const initHiddenPromoBlocks = getHidePromoBlocks(promoBlocks, false);
 
 
