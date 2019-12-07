@@ -1,4 +1,4 @@
-import { hidePopup } from "./showAndHidePopup";
+import { showPopup, hidePopup } from "./showAndHidePopup";
 
 const postData = (body) => {
   // Отправка данных с помощью fetch
@@ -25,6 +25,7 @@ const sendForm = (form, data) => {
     statusMessage.textContent = loadMessage;
     statusMessage.style.color = "SteelBlue";
   } else {
+    showPopup(statusMessage);
     form.appendChild(statusMessage);
   }
 
@@ -48,12 +49,20 @@ const sendForm = (form, data) => {
         throw new Error("network status is " +
           response.status + " - " + response.statusText);
       }
+      showPopup(statusMessage, 100);
       statusMessage.style.color = "Green";
       statusMessage.textContent = succesMessage;
       // Очистка формы при успешном ответе сервера
       const inputes = [...form.elements].filter(
         (elem) => elem.matches("input[type=\"text\"]"));
       inputes.forEach( (elem) => {elem.value = "";});
+      // Удаление сообщения
+      setTimeout( () => {
+        hidePopup(statusMessage);
+        setTimeout( () => {
+          statusMessage.remove();
+        }, 500);
+      }, 5000);
       // Popup формы
       const formPopup = form.closest(".popup");
       if (formPopup) {
@@ -68,6 +77,7 @@ const sendForm = (form, data) => {
       }
     })
     .catch( (error) => {
+      showPopup(statusMessage, 100);
       statusMessage.style.color = "OrangeRed";
       statusMessage.textContent = errorMessage;
       console.error("Ошибка при отправке данных:", error);
