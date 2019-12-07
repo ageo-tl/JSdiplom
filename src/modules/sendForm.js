@@ -1,0 +1,87 @@
+import { showPopup, hidePopup } from "./showAndHidePopup";
+
+const postData = (body) => {
+  // Отправка данных с помощью fetch
+  return fetch("./server.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(body),
+  });
+};
+
+const sendForm = (form, data) => {
+  const errorMessage = "Что-то пошло не так...",
+        loadMessage = "Загрузка...",
+        succesMessage = "Спасибо! Мы скоро с Вами свяжемся!";
+  let statusMessage = document.createElement("div");
+  statusMessage.classList.add("status-message");
+  statusMessage.style.cssText = "font-size: 2rem; color: SteelBlue;";
+
+  // Элемент для сообщения
+  if (form.lastElementChild.matches(".status-message")) {
+    statusMessage = form.lastElementChild;
+    statusMessage.textContent = loadMessage;
+    statusMessage.style.color = "SteelBlue";
+  } else {
+    showPopup(statusMessage);
+    form.appendChild(statusMessage);
+  }
+
+  // Данные из формы
+  const formData = new FormData(form);
+  let body = {};
+  formData.forEach( (val, key) => {
+    body[key] = val;
+  });
+
+  // Пользовательские (если есть)
+  if (data) {
+    body = Object.assign(body, data);
+  }
+
+  // Непосредственно отправка данных на сервер
+  statusMessage.textContent = loadMessage;
+  postData(body)
+    .then( (response) => {
+      if (response.status !== 200) {
+        throw new Error("network status is " +
+          response.status + " - " + response.statusText);
+      }
+      showPopup(statusMessage, 100);
+      statusMessage.style.color = "Green";
+      statusMessage.textContent = succesMessage;
+      // Очистка формы при успешном ответе сервера
+      const inputes = [...form.elements].filter(
+        (elem) => elem.matches("input[type=\"text\"]"));
+      inputes.forEach( (elem) => {elem.value = "";});
+      // Удаление сообщения
+      setTimeout( () => {
+        hidePopup(statusMessage);
+        setTimeout( () => {
+          statusMessage.remove();
+        }, 500);
+      }, 5000);
+      // Popup формы
+      const formPopup = form.closest(".popup");
+      if (formPopup) {
+        // Скрытие popup'а формы
+        setTimeout( () => {
+          hidePopup(formPopup);
+        }, 3500);
+        // Очистка формы .director-form (если требуется)
+        if (formPopup.matches(".popup-consultation")) {
+          document.querySelector("form.director-form > input").value = "";
+        }
+      }
+    })
+    .catch( (error) => {
+      showPopup(statusMessage, 100);
+      statusMessage.style.color = "OrangeRed";
+      statusMessage.textContent = errorMessage;
+      console.error("Ошибка при отправке данных:", error);
+    });
+};
+
+export default sendForm;

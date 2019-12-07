@@ -4,10 +4,15 @@ import {
   animateHideAccordElem
 } from "./modules/toggleElemsOfAccord";
 import { showHiddenBlocks, disableBlockHiding } from "./modules/showAddPromo";
+import { sumpCalc, sumpData } from "./modules/sumpCalc";
+import sendForm from "./modules/sendForm";
+import {cyrillicFilter, numericFilter} from "./modules/inputFilters";
 
 
 document.addEventListener("DOMContentLoaded", () => {
   "use strict";
+  // Для хранения данных с форм (конструктор септика, вопрос для консультации)
+  let userData = null;
 
   // Call me back popup
   const popupCall = document.querySelector(".popup-call");
@@ -23,6 +28,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Get check-list popup
   const popupCheck = document.querySelector(".popup-check");
   const btnGetCheckList = document.querySelector(".check-btn");
+
+
+  // Get consultation popup
+  const popupConsult = document.querySelector(".popup-consultation");
+  const btnConsult = document.querySelector(".consultation-btn");
 
 
   // Promotions and special offers
@@ -53,8 +63,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //accordion-FAQ
   const accordionFAQ = document.getElementById("accordion-two");
-  const accFaqRef = accordionFAQ.querySelectorAll("a[data-parent='#accordion-two']");
-  const accFaqPanels = [...accFaqRef].map((elem) => elem.closest(".panel-heading"));
+  const accFaqRefs = accordionFAQ.querySelectorAll("a[data-parent='#accordion-two']");
+  const accFaqPanels = [...accFaqRefs].map((elem) => elem.closest(".panel-heading"));
   const accFaqPanelBodies = accordionFAQ.querySelectorAll(".panel-collapse");
 
   // Подготовка элементов "аккордеона" с частыми вопросами для анимирования
@@ -70,12 +80,77 @@ document.addEventListener("DOMContentLoaded", () => {
   accFaqPanelBlocks.forEach( (elem) => elem.style.overflow = "hidden");
 
   // Возвращает активный элемент "аккордеона"
-  const getActiveElemOfAccord = (classCollapse) => {
-    return [...accFaqPanelBodies].filter(
+  const getActiveElemOfAccord = (accPanelBodies, classCollapse) => {
+    return [...accPanelBodies].filter(
       (elem) => elem.matches("." + classCollapse)
     )[0];
   };
 
+
+  //accordion-calc
+  const accordionCalc = document.getElementById("accordion");
+  const accCalcRefs = accordionCalc.querySelectorAll("a[data-parent='#accordion'][role='button']");
+  const accCalcPanels = [...accCalcRefs].map((elem) => elem.closest(".panel-heading"));
+  const accCalcPanelBodies = accordionCalc.querySelectorAll(".panel-collapse");
+  const accCalcRefsOnButton = accordionCalc.querySelectorAll("a.construct-btn[data-parent='#accordion']");
+
+  // Подготовка элементов "аккордеона" с частыми вопросами для анимирования
+  const accCalcPanelBodiesHeight = {
+    "collapseOne": "20rem",
+    "collapseTwo": "32rem",
+    "collapseThree": "22rem",
+    "collapseFour": "20rem",
+  };
+  accCalcPanelBodies.forEach( (elem) => {
+    elem.style.height = accCalcPanelBodiesHeight[elem.getAttribute("id")];
+  });
+  const accCalcPanelBlocks = accordionCalc.querySelectorAll(".panel-default");
+  accCalcPanelBlocks.forEach( (elem) => elem.style.overflow = "hidden");
+
+  // Это все из-за '.constructor .panel-four p::after' в css/style.css
+  const podstava = document.querySelector(".constructor .panel-four p");
+
+
+  // sump-switcher
+  const sumpSwitcher =
+      document.getElementById("collapseOne").querySelector(".onoffswitch");
+  const inpSumpSwitcher = document.getElementById("myonoffswitch");
+  const firstSump = document.getElementById("first-sump");
+  const secondSump = document.getElementById("second-sump");
+  const sumpSwitch = () => {
+    if (inpSumpSwitcher.checked) {
+      firstSump.querySelector(".title-text").textContent = "приемный колодец";
+      accCalcPanelBodiesHeight.collapseTwo = "20.5rem";
+      secondSump.style.display = "none";
+    } else {
+      firstSump.querySelector(".title-text").textContent =
+          "первый колодец (приемный)";
+      accCalcPanelBodiesHeight.collapseTwo = "32rem";
+      secondSump.style.display = "block";
+    }
+  };
+  sumpSwitch();
+
+
+  // sump-calculator
+  // use accordionCalc from block 'accordion-calc'
+  // const inpDistance = document.getElementById("collapseFour").querySelector("input");
+  const inpCalcResult = document.getElementById("calc-result");
+
+  inpCalcResult.value = sumpCalc();
+
+
+  // All forms
+  const forms = document.querySelectorAll("form");
+  const directorForm = document.querySelector("form.director-form");
+
+
+  // Input filter
+  const phoneInputs = document.querySelectorAll(".phone-user");
+  const calcInputs = document.querySelectorAll("input[id^=\"calc-\"]");
+
+  const nameInputs = document.querySelectorAll("input[id^=\"name_\"]");
+  const userQuestion = document.getElementById("user_quest");
 
 
 
@@ -101,12 +176,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if ([...btnsDiscount, btnPriceOrder].includes(target)) {
       // popupDiscount.style.display = "block";
       showPopup(popupDiscount);
+      if (btnPriceOrder.contains(target)) {
+        userData = sumpData();
+      } else {
+        userData = null;
+      }
     }
     if (target === popupDiscount ||
         target === popupDiscount.querySelector(".popup-close")) {
       event.preventDefault();
       // popupDiscount.style.display = "none";
       hidePopup(popupDiscount);
+      userData = null;
     }
 
     // Get check-list popup
@@ -118,6 +199,19 @@ document.addEventListener("DOMContentLoaded", () => {
         target === popupCheck.querySelector(".popup-close")) {
       event.preventDefault();
       hidePopup(popupCheck);
+    }
+
+    // Get consultation popup
+    if (target === btnConsult) {
+      event.preventDefault();
+      showPopup(popupConsult);
+      userData = {userQuestion: directorForm.querySelector("input").value};
+    }
+    if (target === popupConsult ||
+        target === popupConsult.querySelector(".popup-close")) {
+      event.preventDefault();
+      hidePopup(popupConsult);
+      userData = null;
     }
 
     // Promotions and special offers
@@ -143,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Прерываем действие, если клик был на активном элементе
         return;
       }
-      const hideElem = getActiveElemOfAccord("in");
+      const hideElem = getActiveElemOfAccord(accFaqPanelBodies, "in");
 
       // simpleTogglePanelBody(showElem, hideElem, "in");
       animateHideAccordElem(hideElem, "in", hideElem.style.height);
@@ -151,8 +245,75 @@ document.addEventListener("DOMContentLoaded", () => {
           accFaqPanelBodiesHeight[showElem.getAttribute("id")]);
     }
 
+    //accordion-Calc
+    if (accCalcPanels.includes(target.closest(".panel-heading")) ||
+        [...accCalcRefsOnButton].includes(target.closest("a"))) {
+      event.preventDefault();
+      let showId;
+      if (target.closest("a.construct-btn")) {
+        // Получим ссылку у элемента a.construct-btn, если была нажата кнопка
+        showId = target.closest("a.construct-btn").getAttribute("href").slice(1);
+      } else {
+        // Получим ссылку у элемента div.panel-heading, если нажали таб
+        showId = target.closest(".panel-heading")
+                      .querySelector("h4>a").getAttribute("href").slice(1);
+      }
+      const showElem = document.getElementById(showId);
+      if (showElem.classList.contains("in")) {
+        // Прерываем действие, если клик был на активном элементе
+        return;
+      }
+      const hideElem = getActiveElemOfAccord(accCalcPanelBodies, "in");
+
+      // simpleTogglePanelBody(showElem, hideElem, "in");
+
+      if (showElem.contains(podstava)) {
+        showPopup(podstava, 600);
+      }
+      if (hideElem.contains(podstava)) {
+        hidePopup(podstava, 200);
+      }
+      animateHideAccordElem(hideElem, "in", hideElem.style.height);
+      animateShowAccordElem(showElem, "in",
+          accCalcPanelBodiesHeight[showElem.getAttribute("id")]);
+    }
 
 
+    //sump-switcher
+    if (sumpSwitcher.contains(target)) {
+      sumpSwitch();
+    }
+  });
+
+
+  // ADD EVENT LISTENER FOR CHANGE
+  accordionCalc.addEventListener("change", (event) => {
+    inpCalcResult.value = sumpCalc();
+  });
+
+
+  // ADD EVENT LISTENER FOR SUBMIT
+  document.addEventListener("submit", (event) => {
+    const { target } = event;
+    const currentForm = target.closest("form");
+    if (currentForm) {
+      event.preventDefault();
+      if (!currentForm.contains(directorForm)) {
+        sendForm(currentForm, currentForm.closest(".popup") ? userData : null);
+      }
+    }
+  });
+
+
+  // ADD EVENT LISTENER FOR INPUT
+  document.addEventListener("input", (event) => {
+    const { target } = event;
+    if ([...phoneInputs, ...calcInputs].includes(target)) {
+      numericFilter(target);
+    }
+    if ([...nameInputs, userQuestion].includes(target)) {
+      cyrillicFilter(target);
+    }
   });
 
 });
