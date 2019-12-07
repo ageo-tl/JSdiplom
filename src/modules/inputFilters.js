@@ -5,8 +5,8 @@ const cyrillicFilter = (input) => {
 };
 
 const numericFilter = (input) => {
-  if (input.value.match(/[^\+\d]/)) {
-    input.value = input.value.replace(/[^\+\d]/, "");
+  if (input.value.match(/[^\d]/)) {
+    input.value = input.value.replace(/[^\d]/, "");
   }
 };
 
