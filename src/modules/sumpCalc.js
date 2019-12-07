@@ -1,3 +1,5 @@
+import { commonAnimation, quad, animateNumber } from "./animation";
+
 const inpSumpSwitcher = document.getElementById("myonoffswitch");
 const firstSumpDiameter = document.getElementById("first-sump-diameter");
 const firstSumpRings = document.getElementById("first-sump-rings");
@@ -17,11 +19,14 @@ const sumpCalc = () => {
                             1000 * (inpSumpSwitcher.checked ? 1 : 2) :
                             0;
 
-  return Math.round( basePrice +
+  const res = Math.round( basePrice +
                       basePrice * coefDiameter +
                       basePrice * coefRings +
                       pricePerBottom
-    );
+                      );
+
+  const animateRes = animateNumber.bind(null, inpCalcResult, inpCalcResult.value, res);
+  commonAnimation({timing: quad, draw: animateRes, duration: 350});
 };
 
 const sumpData = () => {

@@ -1,5 +1,24 @@
 import { commonAnimation, quad, animateOpacity, animateScrollPage } from "./animation";
 
+// Получение скрытых блоков из списка
+const getHidePromoBlocks = (blocks, actual=true) => {
+  const windowWidth = document.documentElement.clientWidth;
+
+  // 768...NO-.visible-sm-block...991
+  let classesMask;
+  if (windowWidth > 768 && windowWidth < 991 && actual) {
+    classesMask = ".hidden";
+  } else {
+    classesMask = ".visible-sm-block, .hidden";
+  }
+
+  let hiddenBlocks = [...blocks].filter( (item) => {
+    if (item.parentNode.matches(classesMask)) {
+      return item;
+    }
+  });
+  return hiddenBlocks.map((item) => item.parentNode);
+};
 
 const disableBlockHiding = (elems) => {
   elems.forEach ( (elem) => elem.style.cssText = 'display: block !important;');
@@ -49,4 +68,8 @@ const showHiddenBlocks = (elems, duration=350, timeoutGap=250) => {
   });
 };
 
-export { showHiddenBlocks, disableBlockHiding };
+export {
+  showHiddenBlocks,
+  disableBlockHiding,
+  getHidePromoBlocks,
+};

@@ -1,5 +1,26 @@
 import { showPopup, hidePopup } from "./showAndHidePopup";
 
+const statuses = {
+  load: {
+    msg: "Загрузка...",
+    color: "SteelBlue",
+  },
+  ok: {
+    msg: "Спасибо! Мы скоро с Вами свяжемся!",
+    color: "Green",
+  },
+  error: {
+    msg: "Что-то пошло не так...",
+    color: "OrangeRed",
+  },
+};
+
+const changeMessage = (elem, state) => {
+  showPopup(elem, 100);
+  elem.textContent = statuses[state].msg;
+  elem.style.color = statuses[state].color;
+};
+
 const postData = (body) => {
   // Отправка данных с помощью fetch
   return fetch("./server.php", {
@@ -11,10 +32,8 @@ const postData = (body) => {
   });
 };
 
+
 const sendForm = (form, data) => {
-  const errorMessage = "Что-то пошло не так...",
-        loadMessage = "Загрузка...",
-        succesMessage = "Спасибо! Мы скоро с Вами свяжемся!";
   let statusMessage = document.createElement("div");
   statusMessage.classList.add("status-message");
   statusMessage.style.cssText = "font-size: 2rem; color: SteelBlue;";
@@ -22,10 +41,7 @@ const sendForm = (form, data) => {
   // Элемент для сообщения
   if (form.lastElementChild.matches(".status-message")) {
     statusMessage = form.lastElementChild;
-    statusMessage.textContent = loadMessage;
-    statusMessage.style.color = "SteelBlue";
   } else {
-    showPopup(statusMessage);
     form.appendChild(statusMessage);
   }
 
@@ -42,16 +58,14 @@ const sendForm = (form, data) => {
   }
 
   // Непосредственно отправка данных на сервер
-  statusMessage.textContent = loadMessage;
+  changeMessage(statusMessage, "load");
   postData(body)
     .then( (response) => {
       if (response.status !== 200) {
         throw new Error("network status is " +
           response.status + " - " + response.statusText);
       }
-      showPopup(statusMessage, 100);
-      statusMessage.style.color = "Green";
-      statusMessage.textContent = succesMessage;
+      changeMessage(statusMessage, "ok");
       // Очистка формы при успешном ответе сервера
       const inputes = [...form.elements].filter(
         (elem) => elem.matches("input[type=\"text\"]"));
@@ -77,9 +91,7 @@ const sendForm = (form, data) => {
       }
     })
     .catch( (error) => {
-      showPopup(statusMessage, 100);
-      statusMessage.style.color = "OrangeRed";
-      statusMessage.textContent = errorMessage;
+      changeMessage(statusMessage, "error");
       console.error("Ошибка при отправке данных:", error);
     });
 };
