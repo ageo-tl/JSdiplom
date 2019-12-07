@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // function for listener
-  const closePopup = (popup, target) => {
+  const closePopup = (event, popup, target) => {
     if (target === popup ||
       target === popup.querySelector(".popup-close")) {
       event.preventDefault();
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
       event.preventDefault();
       showPopup(popupCall);
     }
-    closePopup(popupCall, target);
+    closePopup(event, popupCall, target);
 
     // Discount price and order popup
     if ([...btnsDiscount, btnPriceOrder].includes(target)) {
@@ -130,14 +130,14 @@ document.addEventListener("DOMContentLoaded", () => {
         userData = null;
       }
     }
-    closePopup(popupDiscount, target);
+    closePopup(event, popupDiscount, target);
 
     // Get check-list popup
     if (target === btnGetCheckList) {
       event.preventDefault();
       showPopup(popupCheck);
     }
-    closePopup(popupCheck, target);
+    closePopup(event, popupCheck, target);
 
     // Get consultation popup
     if (target === btnConsult) {
@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
         inpQuestion.style.border = "1px solid red";
       }
     }
-    closePopup(popupConsult, target);
+    closePopup(event, popupConsult, target);
 
     // Promotions and special offers
     if (target === btnPromoMore) {
