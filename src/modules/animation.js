@@ -21,6 +21,11 @@ const animateHeight = (elem, current, target, units, progress) => {
       (current + (target - current) * progress).toString() + units;
 };
 
+// Содержимое (число) элемента input
+const animateNumber = (elem, current, target, progress) => {
+  elem.value =
+        Math.floor(+current + (target - current) * progress);
+};
 
 // Анимация действия
 const commonAnimation = ({ timing, draw, duration }) => {
@@ -49,5 +54,6 @@ export {
   animateOpacity,
   animateScrollPage,
   animateHeight,
+  animateNumber,
   commonAnimation
 };

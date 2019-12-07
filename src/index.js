@@ -87,8 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // sump-calculator
   // use accordionCalc from block 'accordion-calc'
-  const inpCalcResult = document.getElementById("calc-result");
-  inpCalcResult.value = sumpCalc();
+  sumpCalc();
 
 
   // Input filter
@@ -223,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ADD EVENT LISTENER FOR CHANGE
   accordionCalc.addEventListener("change", () => {
-    inpCalcResult.value = sumpCalc();
+    sumpCalc();
   });
 
 
