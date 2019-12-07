@@ -6,6 +6,7 @@ import {
 import { showHiddenBlocks, disableBlockHiding } from "./modules/showAddPromo";
 import { sumpCalc, sumpData } from "./modules/sumpCalc";
 import sendForm from "./modules/sendForm";
+import {cyrillicFilter, numericFilter} from "./modules/inputFilters";
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -144,6 +145,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const directorForm = document.querySelector("form.director-form");
 
 
+  // Input filter
+  const phoneInputs = document.querySelectorAll(".phone-user");
+  const calcInputs = document.querySelectorAll("input[id^=\"calc-\"]");
+
+  const nameInputs = document.querySelectorAll("input[id^=\"name_\"]");
+  const userQuestion = document.getElementById("user_quest");
+
+
 
   // ADD EVENT LISTENER FOR CLICK
   document.addEventListener("click", (event) => {
@@ -197,7 +206,6 @@ document.addEventListener("DOMContentLoaded", () => {
       event.preventDefault();
       showPopup(popupConsult);
       userData = {userQuestion: directorForm.querySelector("input").value};
-      console.log('userData: ', userData);
     }
     if (target === popupConsult ||
         target === popupConsult.querySelector(".popup-close")) {
@@ -293,6 +301,18 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!currentForm.contains(directorForm)) {
         sendForm(currentForm, currentForm.closest(".popup") ? userData : null);
       }
+    }
+  });
+
+
+  // ADD EVENT LISTENER FOR INPUT
+  document.addEventListener("input", (event) => {
+    const { target } = event;
+    if ([...phoneInputs, ...calcInputs].includes(target)) {
+      numericFilter(target);
+    }
+    if ([...nameInputs, userQuestion].includes(target)) {
+      cyrillicFilter(target);
     }
   });
 
