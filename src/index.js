@@ -285,13 +285,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // ADD EVENT LISTENER FOR SUBMIT
-  forms.forEach( (form) => {
-    form.addEventListener("submit", (event) => {
+  document.addEventListener("submit", (event) => {
+    const { target } = event;
+    const currentForm = target.closest("form");
+    if (currentForm) {
       event.preventDefault();
-      if (!form.contains(directorForm)) {
-        sendForm(form, form.closest(".popup") ? userData : null);
+      if (!currentForm.contains(directorForm)) {
+        sendForm(currentForm, currentForm.closest(".popup") ? userData : null);
       }
-    });
+    }
   });
 
 });
