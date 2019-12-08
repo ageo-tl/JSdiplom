@@ -56,5 +56,16 @@ const sumpData = () => {
   return {"septic": data};
 };
 
+const resetSumpCalc = () => {
+  inpSumpSwitcher.checked = true;
+  firstSumpDiameter.options.selectedIndex = 0;
+  firstSumpRings.options.selectedIndex = 0;
+  secondSumpDiameter.options.selectedIndex = 0;
+  secondSumpRings.options.selectedIndex = 0;
+  inpSumpBottom.checked = true;
+  inpDistance.value = "";
+  sumpCalc();
+};
 
-export { sumpCalc, sumpData };
+
+export { sumpCalc, sumpData, resetSumpCalc };
