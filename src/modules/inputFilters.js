@@ -10,4 +10,14 @@ const numericFilter = (input) => {
   }
 };
 
-export { cyrillicFilter, numericFilter };
+const notEmptyValid = (input) => {
+  if (input.value.trim().length) {
+    input.style.border = "";
+    return true;
+  } else {
+    input.style.border = "1px solid red";
+    return false;
+  }
+};
+
+export { cyrillicFilter, numericFilter, notEmptyValid };

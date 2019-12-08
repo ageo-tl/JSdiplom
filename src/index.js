@@ -10,7 +10,11 @@ import {
 } from "./modules/showAddPromo";
 import { sumpCalc, sumpData } from "./modules/sumpCalc";
 import sendForm from "./modules/sendForm";
-import {cyrillicFilter, numericFilter} from "./modules/inputFilters";
+import {
+  cyrillicFilter,
+  numericFilter,
+  notEmptyValid
+} from "./modules/inputFilters";
 import {
   getActiveElemOfAccord,
   prepareAccordFaq,
@@ -39,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const popupDiscount = document.querySelector(".popup-discount");
   const btnsDiscount = document.querySelectorAll(".discount-btn");
   const btnPriceOrder = document.querySelector(".construct-btn.call-btn");
+  const inpDistance = document.getElementById("calc-distance");
 
 
   // Get check-list popup
@@ -123,11 +128,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Discount price and order popup
     if ([...btnsDiscount, btnPriceOrder].includes(target)) {
-      showPopup(popupDiscount);
+      let start = true;
       if (btnPriceOrder.contains(target)) {
         userData = sumpData();
+        start = notEmptyValid(inpDistance);
       } else {
         userData = null;
+      }
+      if (start) {
+        showPopup(popupDiscount);
       }
     }
     closePopup(event, popupDiscount, target);
@@ -142,12 +151,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Get consultation popup
     if (target === btnConsult) {
       event.preventDefault();
-      if (inpQuestion.value) {
-        inpQuestion.style.border = "";
+      userData = {userQuestion: inpQuestion.value};
+      if (notEmptyValid(inpQuestion)) {
         showPopup(popupConsult);
-        userData = {userQuestion: inpQuestion.value};
-      } else {
-        inpQuestion.style.border = "1px solid red";
       }
     }
     closePopup(event, popupConsult, target);
@@ -244,9 +250,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const { target } = event;
     if ([...phoneInputs, ...calcInputs].includes(target)) {
       numericFilter(target);
+      notEmptyValid(target);
     }
     if ([...nameInputs, userQuestion].includes(target)) {
       cyrillicFilter(target);
+      notEmptyValid(target);
     }
   });
 
