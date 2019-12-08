@@ -1,7 +1,7 @@
 import { showPopup, hidePopup } from "./modules/showAndHidePopup";
 import {
-  animateShowAccordElem,
-  animateHideAccordElem
+  toggleAccordFaq,
+  toggleAccordCalc,
 } from "./modules/toggleElemsOfAccord";
 import {
   showHiddenBlocks,
@@ -16,12 +16,9 @@ import {
   notEmptyValid
 } from "./modules/inputFilters";
 import {
-  getActiveElemOfAccord,
   prepareAccordFaq,
   prepareAccordCalc,
   sumpSwitch,
-  accFaqPanelBodiesHeight,
-  accCalcPanelBodiesHeight,
 } from "./modules/accordions";
 
 
@@ -80,8 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const accCalcRefsOnButton = accordionCalc.querySelectorAll("a.construct-btn[data-parent='#accordion']");
   // Подготовка элементов "аккордеона" с частыми вопросами для анимирования
   prepareAccordCalc(accordionCalc, accCalcPanelBodies);
-  // Это все из-за '.constructor .panel-four p::after' в css/style.css
-  const podstava = document.querySelector(".constructor .panel-four p");
 
 
   // sump-switcher
@@ -174,49 +169,14 @@ document.addEventListener("DOMContentLoaded", () => {
     //accordion-FAQ
     if (accFaqPanels.includes(target.closest(".panel-heading"))) {
       event.preventDefault();
-      const showId = target.closest(".panel-heading")
-                      .querySelector("h4>a").getAttribute("href").slice(1);
-      const showElem = document.getElementById(showId);
-      if (showElem.classList.contains("in")) {
-        // Прерываем действие, если клик был на активном элементе
-        return;
-      }
-      const hideElem = getActiveElemOfAccord(accFaqPanelBodies, "in");
-
-      animateHideAccordElem(hideElem, "in", hideElem.style.height);
-      animateShowAccordElem(showElem, "in",
-          accFaqPanelBodiesHeight[showElem.getAttribute("id")]);
+      toggleAccordFaq(target);
     }
 
     //accordion-Calc
     if (accCalcPanels.includes(target.closest(".panel-heading")) ||
         [...accCalcRefsOnButton].includes(target.closest("a"))) {
       event.preventDefault();
-      let showId;
-      if (target.closest("a.construct-btn")) {
-        // Получим ссылку у элемента a.construct-btn, если была нажата кнопка
-        showId = target.closest("a.construct-btn").getAttribute("href").slice(1);
-      } else {
-        // Получим ссылку у элемента div.panel-heading, если нажали таб
-        showId = target.closest(".panel-heading")
-                      .querySelector("h4>a").getAttribute("href").slice(1);
-      }
-      const showElem = document.getElementById(showId);
-      if (showElem.classList.contains("in")) {
-        // Прерываем действие, если клик был на активном элементе
-        return;
-      }
-      const hideElem = getActiveElemOfAccord(accCalcPanelBodies, "in");
-
-      if (showElem.contains(podstava)) {
-        showPopup(podstava, 600);
-      }
-      if (hideElem.contains(podstava)) {
-        hidePopup(podstava, 200);
-      }
-      animateHideAccordElem(hideElem, "in", hideElem.style.height);
-      animateShowAccordElem(showElem, "in",
-          accCalcPanelBodiesHeight[showElem.getAttribute("id")]);
+      toggleAccordCalc(target);
     }
 
     //sump-switcher
