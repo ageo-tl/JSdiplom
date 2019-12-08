@@ -252,8 +252,12 @@ document.addEventListener("DOMContentLoaded", () => {
       numericFilter(target);
       notEmptyValid(target);
     }
-    if ([...nameInputs, userQuestion].includes(target)) {
+    if ([...nameInputs].includes(target)) {
       cyrillicFilter(target);
+      notEmptyValid(target);
+    }
+    if (userQuestion.contains(target)) {
+      cyrillicFilter(target, true);
       notEmptyValid(target);
     }
   });
