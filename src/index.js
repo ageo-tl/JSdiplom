@@ -262,4 +262,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+
+  // ADD EVENT LISTENER FOR MOUSEOVER
+  document.addEventListener("mouseover", (event) => {
+    const { target } = event;
+    if ([...accFaqPanels, ...accCalcPanels].includes(target.closest(".panel-heading"))) {
+      target.closest(".panel-heading").style.cursor = "pointer";
+    }
+  });
+
 });
