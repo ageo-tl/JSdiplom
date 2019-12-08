@@ -1,4 +1,7 @@
 import { showPopup, hidePopup } from "./showAndHidePopup";
+import { resetSumpCalc } from "./sumpCalc";
+import { sumpSwitch } from "./accordions";
+import { toggleAccordCalc } from "./toggleElemsOfAccord";
 
 const statuses = {
   load: {
@@ -14,6 +17,10 @@ const statuses = {
     color: "OrangeRed",
   },
 };
+
+// Панель-заголовок первого элемента аккордеона Конструктора септика
+const accCalcFirstPanel = document.getElementById("headingOne");
+
 
 const changeMessage = (elem, state) => {
   showPopup(elem, 100);
@@ -87,6 +94,12 @@ const sendForm = (form, data) => {
         // Очистка формы .director-form (если требуется)
         if (formPopup.matches(".popup-consultation")) {
           document.querySelector("form.director-form > input").value = "";
+        }
+        // Сброс состояния Конструктора септика (если требуется)
+        if (formPopup.matches(".popup-discount") && data) {
+          resetSumpCalc();
+          sumpSwitch();
+          toggleAccordCalc(accCalcFirstPanel);
         }
       }
     })

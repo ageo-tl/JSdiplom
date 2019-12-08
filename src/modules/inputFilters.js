@@ -1,6 +1,7 @@
-const cyrillicFilter = (input) => {
-  if (input.value.match(/[^А-Яа-яЁе ]/)) {
-    input.value = input.value.replace(/[^А-Яа-яЁе ]/, "");
+const cyrillicFilter = (input, punctuation=false) => {
+  const mask = punctuation ? /[^А-Яа-яЁе ,\.!\?:;-]/ : /[^А-Яа-яЁе ]/;
+  if (input.value.match(mask)) {
+    input.value = input.value.replace(mask, "");
   }
 };
 
